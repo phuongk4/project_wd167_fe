@@ -122,6 +122,12 @@ function ListOrder() {
             case 6:
                 statusName = 'ĐÃ HỦY';
                 break;
+            case 7:
+                statusName = 'CHỜ XÁC NHẬN';
+                break;
+            case 8:
+                statusName = 'ĐÃ XÁC NHẬN';
+                break;
             default:
                 statusName = '';
                 break;
@@ -194,6 +200,8 @@ function ListOrder() {
                                 <option value="4">ĐÃ GIAO HÀNG</option>
                                 <option value="5">ĐÃ HOÀN THÀNH</option>
                                 <option value="6">ĐÃ HỦY</option>
+                                <option value="7">CHỜ XÁC NHẬN</option>
+                                <option value="8">ĐÃ XÁC NHẬN</option>
                             </select>
                         </div>
                     </div>

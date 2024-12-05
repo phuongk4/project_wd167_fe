@@ -11,7 +11,7 @@ const API_ENDPOINT = {
     SEARCH_COUPON: "/api/coupons/search",
     DETAIL_COUPON: "/api/coupons/detail/",
     /* Save coupon */
-    SAVE_COUPON: "/api/my-coupons/save/",
+    SAVE_COUPON: "/api/my-coupons/save",
     //
     ADMIN_LIST_COUPON: "/api/admin/coupons/list",
     ADMIN_DETAIL_COUPON: "/api/admin/coupons/detail/",

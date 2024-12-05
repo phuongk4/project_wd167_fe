@@ -46,7 +46,7 @@ function Header() {
     const handleLogout = () => {
         localStorage.clear();
         sessionStorage.clear();
-        message.success("Logout")
+        message.success("Đăng xuất ")
         navigate("/login")
     }
 

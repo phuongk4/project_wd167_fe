@@ -13,7 +13,7 @@ function Sidebar() {
                     <li className="nav-item">
                         <a className="nav-link collapsed" href="/admin/dashboard">
                             <i className="bi bi-grid"></i>
-                            <span>Trang quản trị</span>
+                            <span>Thống kê</span>
                         </a>
                     </li>
 
@@ -112,20 +112,20 @@ function Sidebar() {
                         </ul>
                     </li>
 
-                    <li className="nav-item">
-                        <a className="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse"
-                           href="#">
-                            <i className="bi bi-bar-chart"></i><span>Thống kê</span><i
-                            className="bi bi-chevron-down ms-auto"></i>
-                        </a>
-                        <ul id="charts-nav" className="nav-content collapse " data-bs-parent="#sidebar-nav">
-                            <li>
-                                <a href="/admin/revenues/list">
-                                    <i className="bi bi-circle"></i><span>Doanh thu</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    {/*<li className="nav-item">*/}
+                    {/*    <a className="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse"*/}
+                    {/*       href="#">*/}
+                    {/*        <i className="bi bi-bar-chart"></i><span>Thống kê</span><i*/}
+                    {/*        className="bi bi-chevron-down ms-auto"></i>*/}
+                    {/*    </a>*/}
+                    {/*    <ul id="charts-nav" className="nav-content collapse " data-bs-parent="#sidebar-nav">*/}
+                    {/*        <li>*/}
+                    {/*            <a href="/admin/revenues/list">*/}
+                    {/*                <i className="bi bi-circle"></i><span>Doanh thu</span>*/}
+                    {/*            </a>*/}
+                    {/*        </li>*/}
+                    {/*    </ul>*/}
+                    {/*</li>*/}
 
 
                     <li className="nav-item">

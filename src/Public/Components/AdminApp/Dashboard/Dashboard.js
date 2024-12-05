@@ -7,10 +7,77 @@ import adminService from "../../Service/AdminService";
 import ConvertNumber from "../../Shared/Utils/ConvertNumber";
 import ECharts from "echarts";
 import * as echarts from 'echarts';
+import $ from "jquery";
+import revenueService from "../../Service/RevenueService";
+import {Table} from "antd";
 
 function Dashboard() {
     const [loading, setLoading] = useState(true);
+    const [total, setTotal] = useState(0);
     const [data, setData] = useState([]);
+    const [revenues, setRevenue] = useState([]);
+
+    const chartRevenus = (xData, yData) => {
+        let chartDom = document.getElementById('reportRevenuesChart');
+        let myChart = echarts.init(chartDom);
+
+        let option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: xData,
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: 'Tổng số tiền',
+                    type: 'bar',
+                    barWidth: '60%',
+                    data: yData
+                }
+            ]
+        };
+        myChart.setOption(option);
+        myChart.resize();
+    }
+
+    const filterRevenueChart = async () => {
+        let type = $('#type').val();
+        await revenueService.adminDataChartRevenue(type)
+            .then((res) => {
+                if (res.status === 200) {
+                    console.log("data", res.data)
+                    let result = res.data.data;
+                    let xData = result.x_data;
+                    let yData = result.y_data;
+                    chartRevenus(xData, yData);
+                    setTotal(result.total);
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
 
     const charts = (dataChart) => {
         const chartDom = document.getElementById('reportsChart');
@@ -100,9 +167,93 @@ function Dashboard() {
         }
     }
 
+    const columns = [
+        {
+            title: 'STT',
+            dataIndex: 'key',
+            width: '10%',
+            render: (text, record, index) => index + 1,
+        },
+        {
+            title: 'Thời gian',
+            dataIndex: 'created_at',
+            width: '60%',
+            render: (text) => {
+                const date = new Date(text);
+                return date.toLocaleString('vi-VN', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                });
+            },
+        },
+        {
+            title: 'Tổng tiền ',
+            dataIndex: 'total',
+            width: 'x',
+            key: 'x',
+            render: (text, record, index) => {
+                return (
+                    <>
+                        {ConvertNumber(text)}
+                    </>
+                );
+            },
+        },
+    ];
+
+    const getListRevenue = async () => {
+        await revenueService.adminListRevenue('', '', '')
+            .then((res) => {
+                if (res.status === 200) {
+                    console.log("data", res.data)
+                    setRevenue(res.data.data)
+                    setLoading(false)
+                } else {
+                    setLoading(false)
+                }
+            })
+            .catch((err) => {
+                setLoading(false)
+                console.log(err)
+            })
+    }
+
+    const loadFn = async () => {
+        $(document).ready(function () {
+            $("#inputSearchOrder").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $(".ant-table-content table tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    }
+
+    const handleTableChange = (pagination, filters, sorter) => {
+        setTableParams({
+            pagination,
+            filters,
+            ...sorter,
+        });
+    };
+
+    const [tableParams, setTableParams] = useState({
+        pagination: {
+            current: 1,
+            pageSize: 10,
+        },
+    });
+
     useEffect(() => {
         homeDashboard();
         renderChart('');
+        filterRevenueChart();
+        getListRevenue();
+        loadFn();
     }, []);
 
     return (
@@ -225,6 +376,45 @@ function Dashboard() {
                                         </div>
                                     </div>
                                 </div>
+
+                                <div className="col-12 sale_details_ mb-5">
+                                    <div className="card">
+                                        <div className="card-body p-3">
+                                            <h6 className="text-start mb-2">Tổng doanh thu: {ConvertNumber(total)}</h6>
+                                            <div className="mb-1 col-md-3">
+                                                <label htmlFor="type">Lọc theo:</label>
+                                                <select name="type" id="type" className="form-select"
+                                                        onChange={filterRevenueChart}>
+                                                    <option value="">--- Chọn ---</option>
+                                                    <option value="day">Ngày</option>
+                                                    <option value="month">Tháng</option>
+                                                    <option value="year">Năm</option>
+                                                </select>
+                                            </div>
+                                            <div id="reportRevenuesChart" style={{height: '400px'}}/>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-12">
+                                    <div className="d-flex align-items-center justify-content-between row col-md-12">
+                                        <div className="mb-3 col-md-3">
+                                            <h5>Tìm kiếm</h5>
+                                            <input className="form-control" id="inputSearchOrder" type="text"
+                                                   placeholder="Nhập thông tin.."/>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                    <Table
+                                        style={{margin: "auto"}}
+                                        columns={columns}
+                                        dataSource={revenues}
+                                        pagination={tableParams.pagination}
+                                        loading={loading}
+                                        onChange={handleTableChange}
+                                    />
+                                </div>
+
                                 <div className="col-12">
                                     <div className="card top-selling overflow-auto">
                                         <div className="filter">
@@ -291,7 +481,7 @@ function Dashboard() {
                                     </ul>
                                 </div>
                                 <div className="card-body">
-                                    <h5 className="card-title">Tỉ lệ đơn hàng <span>| Hôm nay</span></h5>
+                                <h5 className="card-title">Tỉ lệ đơn hàng <span>| Hôm nay</span></h5>
                                     <div id="reportsChart" style={{height: '600px'}}/>
                                 </div>
                             </div>

@@ -1274,3 +1274,53 @@ h6 {
     text-overflow: ellipsis;
     position: relative;
 }
+
+#bar-progress {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+}
+
+#bar-progress .step {
+    display: inline-block;
+}
+
+#bar-progress .step .number-container {
+    display: inline-block;
+    border: solid 1px #000;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+}
+
+#bar-progress .step.step-active .number-container {
+    background-color: #000;
+}
+
+#bar-progress .step .number-container .number {
+    font-weight: 700;
+    font-size: .8em;
+    line-height: 1.75em;
+    display: block;
+    text-align: center;
+}
+
+#bar-progress .step.step-active .number-container .number {
+    color: white;
+}
+
+#bar-progress .step h5 {
+    display: inline;
+    font-weight: 100;
+    font-size: .8em;
+    margin-left: 10px;
+    text-transform: uppercase;
+}
+
+#bar-progress .seperator {
+    display: block;
+    width: 20px;
+    height: 1px;
+    background-color: rgba(0, 0, 0, .2);
+    margin: auto 20px;
+}

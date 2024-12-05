@@ -34,7 +34,7 @@ function Coupons() {
 
         if (email == null || Token == null) {
             alert('Vui lòng đăng nhập...')
-            navigate('/login')
+            navigate('/not-found')
             return;
         }
 
